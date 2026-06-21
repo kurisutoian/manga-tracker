@@ -9,8 +9,11 @@
 <body>
 
     <header>
-        <h1>📚 Mi Manga Tracker</h1>
-        <p>Controla tus lecturas antes de dar el salto al servidor.</p>
+        <div class="header-contenido">
+            <h1>📚 Mi Manga Tracker</h1>
+            <p>Controla tus lecturas antes de dar el salto al servidor.</p>
+        </div>
+        <button id="btn-tema" class="btn-tema">🌙 Modo Oscuro</button>
     </header>
 
     <main class="contenedor">
@@ -36,12 +39,40 @@
                     <input type="number" id="capitulo" min="0" value="0" required>
                 </div>
 
+                <div class="grupo-control">
+                    <label for="portada">Enlace de la Portada (URL Imagen):</label>
+                    <input type="url" id="portada" placeholder="https://enlace-de-la-imagen.com/foto.jpg">
+                </div>
+
+                <div class="grupo-control">
+                    <label for="puntuacion">Tu Puntuación:</label>
+                    <select id="puntuacion">
+                        <option value="0">☆☆☆☆☆ (Sin calificar)</option>
+                        <option value="1">⭐☆☆☆☆ (Malo)</option>
+                        <option value="2">⭐⭐☆☆☆ (Regular)</option>
+                        <option value="3">⭐⭐⭐☆☆ (Bueno)</option>
+                        <option value="4">⭐⭐⭐⭐☆ (Muy Bueno)</option>
+                        <option value="5">⭐⭐⭐⭐⭐ (Obra Maestra)</option>
+                    </select>
+                </div>
+
                 <button type="submit">Agregar a la lista</button>
             </form>
         </section>
 
         <section class="lista-seccion">
             <h2>Mi Colección</h2>
+            
+            <div class="herramientas-lista">
+                <input type="text" id="buscador" placeholder="🔍 Buscar manga por título...">
+                <select id="filtro-estado">
+                    <option value="todos">📁 Mostrar Todos</option>
+                    <option value="leyendo">📖 Leyendo</option>
+                    <option value="pendiente">⏳ Por leer</option>
+                    <option value="abandonado">❌ Abandonado</option>
+                </select>
+            </div>
+
             <div id="mangas-contenedor" class="grid-mangas">
                 </div>
         </section>

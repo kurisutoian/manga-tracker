@@ -4,6 +4,19 @@
     --text-color: #333333;
     --primary-color: #5c6bc0;
     --primary-hover: #3f51b5;
+    --border-color: #ccc;
+    --input-bg: #ffffff;
+}
+
+/* Variables para Modo Oscuro */
+[data-theme="dark"] {
+    --bg-color: #1e1e24;
+    --card-bg: #2a2a32;
+    --text-color: #f4f7f6;
+    --primary-color: #7986cb;
+    --primary-hover: #9fa8da;
+    --border-color: #444;
+    --input-bg: #3a3a45;
 }
 
 body {
@@ -12,6 +25,7 @@ body {
     color: var(--text-color);
     margin: 0;
     padding: 0;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 header {
@@ -19,14 +33,40 @@ header {
     color: white;
     text-align: center;
     padding: 2rem 1rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-tema {
+    position: absolute;
+    right: 2rem;
+    top: 2rem;
+    width: auto;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    color: white;
+    transition: 0.3s;
+}
+.btn-tema:hover {
+    background: white;
+    color: var(--primary-color);
+}
+
+@media (max-width: 768px) {
+    .btn-tema { position: static; margin-top: 1rem; }
 }
 
 .contenedor {
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 2rem auto;
     padding: 0 1rem;
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 1fr 2.5fr;
     gap: 2rem;
 }
 
@@ -39,6 +79,7 @@ header {
     padding: 1.5rem;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    height: fit-content;
 }
 
 .grupo-control {
@@ -54,9 +95,11 @@ label {
 input, select {
     width: 100%;
     padding: 0.7rem;
-    border: 1px solid #ccc;
+    border: 1px solid var(--border-color);
     border-radius: 4px;
     box-sizing: border-box;
+    background-color: var(--input-bg);
+    color: var(--text-color);
 }
 
 button {
@@ -70,67 +113,95 @@ button {
     font-size: 1rem;
     font-weight: bold;
 }
-
 button:hover { background-color: var(--primary-hover); }
 
+/* Barra de Herramientas (Buscador y Filtro) */
+.herramientas-lista {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+.herramientas-lista input { flex: 2; }
+.herramientas-lista select { flex: 1; }
+
+@media (max-width: 480px) {
+    .herramientas-lista { flex-direction: column; }
+}
+
+/* Reorganización de Tarjetas para soportar Imagen */
 .grid-mangas {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5rem;
 }
 
 .manga-card {
-    background: #f9f9f9;
-    border-left: 5px solid #ccc;
-    padding: 1rem;
-    border-radius: 4px;
-    position: relative;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-top: 5px solid #ccc;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 }
 
-/* Colores dinámicos por estado */
-.manga-card.leyendo { border-left-color: #4caf50; }
-.manga-card.pendiente { border-left-color: #ff9800; }
-.manga-card.abandonado { border-left-color: #f44336; }
+/* Colores dinámicos superiores */
+.manga-card.leyendo { border-top-color: #4caf50; }
+.manga-card.pendiente { border-top-color: #ff9800; }
+.manga-card.abandonado { border-top-color: #f44336; }
 
-.manga-card h3 { margin: 0 0 0.5rem 0; font-size: 1.2rem; }
-.manga-card p { margin: 0 0 1rem 0; font-size: 0.9rem; text-transform: capitalize; }
-
-.btn-eliminar {
-    background-color: #e57373;
-    padding: 0.3rem 0.6rem;
-    font-size: 0.8rem;
+.manga-portada {
     width: 100%;
+    height: 200px;
+    object-fit: cover;
+    background-color: #eaeaea;
 }
-.btn-eliminar:hover { background-color: #d32f2f; }
 
-/* Control de capítulos dentro de las tarjetas */
+.manga-info {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.manga-card h3 { margin: 0 0 0.3rem 0; font-size: 1.1rem; }
+.manga-info .estado-texto { margin: 0 0 0.5rem 0; font-size: 0.85rem; opacity: 0.8; }
+.manga-info .estrellas { color: #ffca28; margin-bottom: 0.8rem; font-size: 0.9rem; }
+
+/* Selector de estado directo en tarjeta */
+.select-cambiar-estado {
+    padding: 0.3rem;
+    font-size: 0.85rem;
+    margin-bottom: 0.8rem;
+}
+
 .control-capitulos {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #eee;
-    padding: 0.5rem;
+    background: var(--bg-color);
+    padding: 0.4rem 0.6rem;
     border-radius: 4px;
-    margin-bottom: 1rem;
+    margin-bottom: 0.8rem;
 }
-
-.control-capitulos span {
-    font-weight: bold;
-}
+.control-capitulos span { font-weight: bold; }
 
 .btn-cap {
-    background-color: #7986cb;
+    background-color: var(--primary-color);
     color: white;
     border: none;
-    padding: 0.2rem 0.6rem;
-    font-size: 1rem;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.9rem;
     border-radius: 3px;
     cursor: pointer;
     width: auto;
-    display: inline-block;
 }
 
-.btn-cap:hover {
-    background-color: #5c6bc0;
+.btn-eliminar {
+    background-color: #e57373;
+    padding: 0.4rem;
+    font-size: 0.85rem;
+    margin-top: auto; /* Empuja el botón al fondo de la tarjeta */
 }
+.btn-eliminar:hover { background-color: #d32f2f; }
