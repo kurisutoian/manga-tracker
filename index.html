@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Manga Tracker 📚</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>📚 Mi Manga Tracker</h1>
+        <p>Controla tus lecturas antes de dar el salto al servidor.</p>
+    </header>
+
+    <main class="contenedor">
+        <section class="formulario-seccion">
+            <h2>Agregar Nuevo Manga</h2>
+            <form id="manga-form">
+                <div class="grupo-control">
+                    <label for="titulo">Título del Manga:</label>
+                    <input type="text" id="titulo" placeholder="Ej. One Piece, Berserk..." required>
+                </div>
+
+                <div class="grupo-control">
+                    <label for="estado">Estado de lectura:</label>
+                    <select id="estado">
+                        <option value="leyendo">📖 Leyendo</option>
+                        <option value="pendiente">⏳ Por leer (Futuro)</option>
+                        <option value="abandonado">❌ Abandonado</option>
+                    </select>
+                </div>
+
+                <div class="grupo-control">
+                    <label for="capitulo">Capítulo actual:</label>
+                    <input type="number" id="capitulo" min="0" value="0" required>
+                </div>
+
+                <button type="submit">Agregar a la lista</button>
+            </form>
+        </section>
+
+        <section class="lista-seccion">
+            <h2>Mi Colección</h2>
+            <div id="mangas-contenedor" class="grid-mangas">
+                </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
