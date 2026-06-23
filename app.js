@@ -4,6 +4,7 @@ const tituloInput = document.getElementById('titulo');
 const estadoSelect = document.getElementById('estado');
 const capituloInput = document.getElementById('capitulo');
 const portadaInput = document.getElementById('portada');
+const urlMangaInput = document.getElementById('url-manga'); // <-- NUEVO
 const puntuacionSelect = document.getElementById('puntuacion');
 const mangasContenedor = document.getElementById('mangas-contenedor');
 
@@ -50,12 +51,19 @@ function renderizarMangas() {
         // Generar las estrellas visuales
         const estrellasVisuales = '⭐'.repeat(manga.puntuacion) + '☆'.repeat(5 - manga.puntuacion);
 
+        // NUEVO: Validar si el manga tiene URL para inyectar el botón interactivo
+        const botonLeer = manga.urlManga 
+            ? `<a href="${manga.urlManga}" target="_blank" class="btn-leer" onclick="asistirLectura(${manga.id})">🌐 Ir a Leer</a>` 
+            : '';
+
         tarjeta.innerHTML = `
             <img src="${manga.portada || IMAGEN_DEFECTO}" alt="Portada de ${manga.titulo}" class="manga-portada" onerror="this.src='${IMAGEN_DEFECTO}'">
             <div class="manga-info">
                 <h3>${manga.titulo}</h3>
                 <span class="estrellas">${estrellasVisuales}</span>
                 
+                ${botonLeer}
+
                 <select class="select-cambiar-estado" onchange="actualizarEstadoManga(${manga.id}, this.value)">
                     <option value="leyendo" ${manga.estado === 'leyendo' ? 'selected' : ''}>📖 Leyendo</option>
                     <option value="pendiente" ${manga.estado === 'pendiente' ? 'selected' : ''}>⏳ Por Leer</option>
@@ -86,6 +94,7 @@ mangaForm.addEventListener('submit', (e) => {
         estado: estadoSelect.value,
         capitulo: parseInt(capituloInput.value) || 0,
         portada: portadaInput.value.trim(),
+        urlManga: urlMangaInput.value.trim(), // <-- NUEVO: Guardamos la URL
         puntuacion: parseInt(puntuacionSelect.value) || 0
     };
 
@@ -121,10 +130,10 @@ function actualizarEstadoManga(id, nuevoEstado) {
         return manga;
     });
     guardarEnLocalStorage();
-    renderizarMangas(); // Re-renderiza para actualizar el color del borde superior
+    renderizarMangas();
 }
 
-// 7. Eliminar manga con confirmación nativa mejorada
+// 7. Eliminar manga con confirmación nativa
 function eliminarManga(id, titulo) {
     const seguro = confirm(`¿Estás seguro de que deseas eliminar "${titulo}" de tu lista?`);
     if (seguro) {
@@ -132,6 +141,22 @@ function eliminarManga(id, titulo) {
         guardarEnLocalStorage();
         renderizarMangas();
     }
+}
+
+// NUEVA FUNCIÓN: Suma automáticamente +1 capítulo al hacer clic en "Ir a Leer"
+function asistirLectura(id) {
+    misMangas = misMangas.map(manga => {
+        if (manga.id === id) {
+            return { ...manga, capitulo: manga.capitulo + 1 };
+        }
+        return manga;
+    });
+    guardarEnLocalStorage();
+    
+    // Un leve delay para asegurar la fluidez visual mientras abre la pestaña externa
+    setTimeout(() => {
+        renderizarMangas();
+    }, 1000);
 }
 
 // 8. Lógica del Modo Oscuro

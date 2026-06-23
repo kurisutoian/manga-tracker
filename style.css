@@ -202,6 +202,24 @@ button:hover { background-color: var(--primary-hover); }
     background-color: #e57373;
     padding: 0.4rem;
     font-size: 0.85rem;
-    margin-top: auto; /* Empuja el botón al fondo de la tarjeta */
+    margin-top: auto;
 }
 .btn-eliminar:hover { background-color: #d32f2f; }
+
+/* NUEVO: Botón para Ir a Leer en la Extensión */
+.btn-leer {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    background-color: #26a69a;
+    color: white;
+    padding: 0.5rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 0.8rem;
+    transition: background-color 0.2s;
+}
+.btn-leer:hover {
+    background-color: #00897b;
+}
