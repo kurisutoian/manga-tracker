@@ -4,7 +4,7 @@ const tituloInput = document.getElementById('titulo');
 const estadoSelect = document.getElementById('estado');
 const capituloInput = document.getElementById('capitulo');
 const portadaInput = document.getElementById('portada');
-const urlMangaInput = document.getElementById('url-manga'); // <-- NUEVO
+const urlMangaInput = document.getElementById('url-manga'); // Selector para la URL de lectura
 const puntuacionSelect = document.getElementById('puntuacion');
 const mangasContenedor = document.getElementById('mangas-contenedor');
 
@@ -51,10 +51,20 @@ function renderizarMangas() {
         // Generar las estrellas visuales
         const estrellasVisuales = '⭐'.repeat(manga.puntuacion) + '☆'.repeat(5 - manga.puntuacion);
 
-        // NUEVO: Validar si el manga tiene URL para inyectar el botón interactivo
-        const botonLeer = manga.urlManga 
-            ? `<a href="${manga.urlManga}" target="_blank" class="btn-leer" onclick="asistirLectura(${manga.id})">🌐 Ir a Leer</a>` 
-            : '';
+        // AUTOMATIZACIÓN DE ENLACE:
+        // Si el usuario guardó una URL, la usamos. 
+        // Si no, generamos un enlace dinámico de búsqueda en Google usando su título.
+        let urlDestino = manga.urlManga;
+        let textoBoton = '🌐 Ir a Leer';
+
+        if (!urlDestino) {
+            // Convierte el título en un término de búsqueda URL seguro
+            const terminoBusqueda = encodeURIComponent(`${manga.titulo} manga leer online`);
+            urlDestino = `https://www.google.com/search?q=${terminoBusqueda}`;
+            textoBoton = '🔍 Buscar Dónde Leer';
+        }
+
+        const botonLeer = `<a href="${urlDestino}" target="_blank" class="btn-leer" onclick="asistirLectura(${manga.id})">${textoBoton}</a>`;
 
         tarjeta.innerHTML = `
             <img src="${manga.portada || IMAGEN_DEFECTO}" alt="Portada de ${manga.titulo}" class="manga-portada" onerror="this.src='${IMAGEN_DEFECTO}'">
@@ -94,7 +104,7 @@ mangaForm.addEventListener('submit', (e) => {
         estado: estadoSelect.value,
         capitulo: parseInt(capituloInput.value) || 0,
         portada: portadaInput.value.trim(),
-        urlManga: urlMangaInput.value.trim(), // <-- NUEVO: Guardamos la URL
+        urlManga: urlMangaInput.value.trim(), // Guarda la URL ingresada (puede ir vacía)
         puntuacion: parseInt(puntuacionSelect.value) || 0
     };
 
@@ -106,7 +116,7 @@ mangaForm.addEventListener('submit', (e) => {
     renderizarMangas();
 });
 
-// 5. Aumentar o disminuir capítulos
+// 5. Aumentar o disminuir capítulos manualmente
 function cambiarCapitulo(id, cambio) {
     misMangas = misMangas.map(manga => {
         if (manga.id === id) {
@@ -143,7 +153,7 @@ function eliminarManga(id, titulo) {
     }
 }
 
-// NUEVA FUNCIÓN: Suma automáticamente +1 capítulo al hacer clic en "Ir a Leer"
+// FUNCIÓN AUTOMÁTICA: Suma automáticamente +1 capítulo al hacer clic en el botón de lectura
 function asistirLectura(id) {
     misMangas = misMangas.map(manga => {
         if (manga.id === id) {
@@ -153,7 +163,7 @@ function asistirLectura(id) {
     });
     guardarEnLocalStorage();
     
-    // Un leve delay para asegurar la fluidez visual mientras abre la pestaña externa
+    // Pequeño delay de re-renderizado para mantener fluida la apertura de la nueva pestaña
     setTimeout(() => {
         renderizarMangas();
     }, 1000);

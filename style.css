@@ -206,12 +206,12 @@ button:hover { background-color: var(--primary-hover); }
 }
 .btn-eliminar:hover { background-color: #d32f2f; }
 
-/* NUEVO: Botón para Ir a Leer en la Extensión */
+/* Botón base para lectura externa */
 .btn-leer {
     display: block;
     text-align: center;
     text-decoration: none;
-    background-color: #26a69a;
+    background-color: #26a69a; /* Color verde si tiene URL directa */
     color: white;
     padding: 0.5rem;
     border-radius: 4px;
@@ -222,4 +222,12 @@ button:hover { background-color: var(--primary-hover); }
 }
 .btn-leer:hover {
     background-color: #00897b;
+}
+
+/* Estilo alternativo si el enlace es una búsqueda automatizada en Google */
+.btn-leer[href*="google.com"] {
+    background-color: #29b6f6; /* Color azul */
+}
+.btn-leer[href*="google.com"]:hover {
+    background-color: #039be5;
 }
